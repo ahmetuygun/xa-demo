@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "SECURTY_CHECK")
+@Table(name = "SECURITY_CHECK")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

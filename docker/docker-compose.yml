@@ -1,0 +1,45 @@
+version: '3'
+services:
+  mysql1:
+    image: mysql:5.7
+    container_name: mysql1
+    environment:
+      MYSQL_ROOT_PASSWORD: securityCheck
+      MYSQL_DATABASE: securityCheck
+      MYSQL_USER: securityCheck
+      MYSQL_PASSWORD: securityCheck
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker-entrypoint-initdb.d.checkSecurity:/docker-entrypoint-initdb.d
+
+  mysql2:
+    image: mysql:5.7
+    container_name: mysql2
+    environment:
+      MYSQL_ROOT_PASSWORD: visaApplication
+      MYSQL_DATABASE: visaApplication
+      MYSQL_USER: visaApplication
+      MYSQL_PASSWORD: visaApplication
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./docker-entrypoint-initdb.d.visaApplication:/docker-entrypoint-initdb.d
+
+  artemis:
+    image: vromero/activemq-artemis
+    container_name: artemis
+    environment:
+      - ARTEMIS_USERNAME=visaApplication
+      - ARTEMIS_PASSWORD=visaApplication
+    ports:
+      - "8161:8161"  # Web Console
+      - "61616:61616"  # OpenWire
+      - "5445:5445"    # AMQP
+    volumes:
+      - artemis_data:/var/lib/artemis/data
+
+volumes:
+  mysql1_data:
+  mysql2_data:
+  artemis_data:

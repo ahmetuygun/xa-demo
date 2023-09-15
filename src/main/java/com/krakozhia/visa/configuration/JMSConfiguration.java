@@ -16,6 +16,10 @@ public class JMSConfiguration {
 
     @Value("${jms.url}")
     String jmsUrl;
+    @Value("${jms.userName}")
+    String jmsUserName;
+    @Value("${jms.passport}")
+    String jmsPassport;
 
     @Bean
     public JmsTemplate jmsTemplate() throws Throwable {
@@ -27,6 +31,8 @@ public class JMSConfiguration {
         ActiveMQXAConnectionFactory activeMQXAConnectionFactory = new
                 ActiveMQXAConnectionFactory();
         activeMQXAConnectionFactory.setBrokerURL(jmsUrl);
+        activeMQXAConnectionFactory.setUser(jmsUserName);
+        activeMQXAConnectionFactory.setPassword(jmsPassport);
         AtomikosConnectionFactoryBean atomikosConnectionFactoryBean = new AtomikosConnectionFactoryBean();
         atomikosConnectionFactoryBean.setUniqueResourceName("xamq");
         atomikosConnectionFactoryBean.setLocalTransactionMode(false);

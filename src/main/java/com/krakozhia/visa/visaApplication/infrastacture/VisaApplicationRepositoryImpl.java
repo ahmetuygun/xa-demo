@@ -71,7 +71,6 @@ public class VisaApplicationRepositoryImpl implements VisaApplicationRepository 
     }
 
     @Override
-    @Transactional
     public void save(VisaApplication visaApplication) {
         PassportInformation passportInformation = visaApplication.applicantPassportInfo();
         PassportEntity passportEntity = passportEntityRepository.save(toPassportEntity(passportInformation));

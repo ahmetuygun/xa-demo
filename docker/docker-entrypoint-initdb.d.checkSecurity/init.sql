@@ -1,0 +1,4 @@
+create table SECURITY_CHECK (id bigint not null, visaApplicationRefId bigint, source1SecurityCheckStatus enum ('FAILED','PASSED','PENDING'), source2SecurityCheckStatus enum ('FAILED','PASSED','PENDING'), source3SecurityCheckStatus enum ('FAILED','PASSED','PENDING'), primary key (id)) engine=InnoDB;
+alter table SECURITY_CHECK modify column source1SecurityCheckStatus  enum ('FAILED','PASSED','PENDING');
+alter table SECURITY_CHECK modify column source2SecurityCheckStatus  enum ('FAILED','PASSED','PENDING');
+alter table SECURITY_CHECK modify column source3SecurityCheckStatus  enum ('FAILED','PASSED','PENDING');

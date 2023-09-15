@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -20,19 +19,19 @@ import java.util.Map;
 
 @Configuration
 @EnableJpaRepositories(
-        entityManagerFactoryRef = "DataSourceConfiguration",
+        entityManagerFactoryRef = "VisaApplicationDataSourceConfiguration",
         transactionManagerRef = "transactionManager",
-        basePackages = {"com.krakozhia.visa"}
+        basePackages = {"com.krakozhia.visa.visaApplication"}
 )
-public class DataSourceConfiguration {
+public class VisaApplicationDataSourceConfiguration {
 
-    @Value("${db.url}")
+    @Value("${visaApplication.db.url}")
     String dbUrl;
 
-    @Value("${db.username}")
+    @Value("${visaApplication.db.username}")
     String username;
 
-    @Value("${db.passport}")
+    @Value("${visaApplication.db.passport}")
     String passport;
 
     public Map<String, String> jpaProperties() {
@@ -45,36 +44,36 @@ public class DataSourceConfiguration {
         return jpaProperties;
     }
 
-    @Bean(name = "entityManagerFactoryBuilder")
-    public EntityManagerFactoryBuilder entityManagerFactoryBuilder() {
+    @Bean(name = "visaApplicationEntityManagerFactoryBuilder")
+    public EntityManagerFactoryBuilder visaApplicationEntityManagerFactoryBuilder() {
         return new EntityManagerFactoryBuilder(
                 new HibernateJpaVendorAdapter(), jpaProperties(), null
         );
     }
 
 
-    @Bean(name = "DataSourceConfiguration")
+    @Bean(name = "VisaApplicationDataSourceConfiguration")
     public LocalContainerEntityManagerFactoryBean getPostgresEntityManager(
-            @Qualifier("entityManagerFactoryBuilder") EntityManagerFactoryBuilder entityManagerFactoryBuilder,
-            @Qualifier("dataSource") DataSource postgresDataSource
+            @Qualifier("visaApplicationEntityManagerFactoryBuilder") EntityManagerFactoryBuilder entityManagerFactoryBuilder,
+            @Qualifier("visaApplicationDataSource") DataSource postgresDataSource
     ) {
         return entityManagerFactoryBuilder
                 .dataSource(postgresDataSource)
-                .packages("com.krakozhia.visa")
+                .packages("com.krakozhia.visa.visaApplication")
                 .persistenceUnit("mysql")
                 .properties(jpaProperties())
                 .jta(true)
                 .build();
     }
 
-    @Bean("dataSourceProperties")
-    public DataSourceProperties dataSourceProperties() {
+    @Bean("visaApplicationDataSourceProperties")
+    public DataSourceProperties visaApplicationDataSourceProperties() {
         return new DataSourceProperties();
     }
 
 
-    @Bean("dataSource")
-    public DataSource dataSource(@Qualifier("dataSourceProperties") DataSourceProperties dataSourceProperties) {
+    @Bean("visaApplicationDataSource")
+    public DataSource visaApplicationDataSource(@Qualifier("visaApplicationDataSourceProperties") DataSourceProperties dataSourceProperties) {
         MysqlXADataSource mysqlXaDataSource = new MysqlXADataSource();
         mysqlXaDataSource.setUrl(dbUrl);
         mysqlXaDataSource.setUser(username);
@@ -82,7 +81,7 @@ public class DataSourceConfiguration {
 
         AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
         xaDataSource.setXaDataSource(mysqlXaDataSource);
-        xaDataSource.setUniqueResourceName("xa_visa");
+        xaDataSource.setUniqueResourceName("xa_visaApplication");
         xaDataSource.setMaxPoolSize(30);
         return xaDataSource;
     }
